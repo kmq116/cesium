@@ -1031,6 +1031,8 @@ function fetchImage(options) {
     if (!resource.isDataUri && !resource.isBlobUri) {
       crossOrigin = resource.isCrossOriginUrl;
     }
+    // fix 如果访问本地文件需要设置跨域
+    if (request.url.substring(0, 4) === "file") crossOrigin = true;
 
     const deferred = defer();
     Resource._Implementations.createImage(
@@ -1055,6 +1057,7 @@ function fetchImage(options) {
     if (request.state !== RequestState.FAILED) {
       return Promise.reject(e);
     }
+
     return resource.retryOnError(e).then(function (retry) {
       if (retry) {
         // Reset request so it can try again

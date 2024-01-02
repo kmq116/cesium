@@ -124,12 +124,13 @@ TrustedServers.contains = function (url) {
   if (!defined(url)) {
     throw new DeveloperError("url is required.");
   }
+  // fix 如果访问本地文件需要设置跨域
+  if (url.substring(0, 4) === "file") return false;
   //>>includeEnd('debug');
   const authority = getAuthority(url);
   if (defined(authority) && defined(_servers[authority])) {
     return true;
   }
-
   return false;
 };
 
