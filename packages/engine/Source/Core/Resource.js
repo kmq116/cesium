@@ -1022,8 +1022,13 @@ function fetchImage(options) {
       crossOrigin = resource.isCrossOriginUrl;
     }
     // fix 如果访问本地文件需要设置跨域
-    if (request.url.substring(0, 4) === "file") crossOrigin = true;
-
+    if (request.url.substring(0, 4) === "file") {
+      crossOrigin = true;
+    }
+    if (!request.url.startsWith("http")) {
+      console.log("加载的路径不是 https 开头的", request.url);
+      crossOrigin = true;
+    }
     const deferred = defer();
     Resource._Implementations.createImage(
       request,
